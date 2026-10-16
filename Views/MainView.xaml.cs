@@ -12,8 +12,14 @@ namespace HeatMapTracker.Views;
 /// </summary>
 public partial class MainView : ContentPage
 {
-    /// <summary>Initial map span when no recorded points exist yet.</summary>
-    private static readonly Distance DefaultSpanRadius = Distance.FromKilometers(2);
+    /// <summary>Metres in one degree of latitude; longitude is scaled by the cosine of latitude.</summary>
+    private const double MetresPerDegreeLatitude = 111_320.0;
+
+    /// <summary>
+    /// Smallest radius used when framing the map, so that a handful of readings taken a few
+    /// metres apart do not zoom the viewport in past the point of being useful.
+    /// </summary>
+    private static readonly Distance MinimumSpanRadius = Distance.FromMeters(150);
 
     private readonly LocationDatabase _database;
     private readonly LocationTrackingService _tracker;
@@ -99,9 +105,7 @@ public partial class MainView : ContentPage
 
         if (recenter && points.Count > 0)
         {
-            LocationPoint newest = points[^1];
-            HeatMap.MoveToRegion(MapSpan.FromCenterAndRadius(
-                new Location(newest.Latitude, newest.Longitude), DefaultSpanRadius));
+            HeatMap.MoveToRegion(BuildRegion(points));
         }
 
         string state = _tracker.IsTracking ? "Tracking" : "Stopped";
@@ -112,6 +116,39 @@ public partial class MainView : ContentPage
 
     /// <summary>Returns <paramref name="noun"/> pluralised for the supplied count.</summary>
     private static string Plural(int count, string noun) => count == 1 ? noun : noun + "s";
+
+    /// <summary>
+    /// Frames the viewport on the bounding box of every recorded reading. A fixed radius
+    /// cannot serve both a short walk and a long drive: anything wide enough for the drive
+    /// renders the walk as an unreadable speck, so the span is derived from the data.
+    /// </summary>
+    /// <param name="points">Every reading currently stored.</param>
+    private static MapSpan BuildRegion(IReadOnlyList<LocationPoint> points)
+    {
+        double minimumLatitude = points.Min(p => p.Latitude);
+        double maximumLatitude = points.Max(p => p.Latitude);
+        double minimumLongitude = points.Min(p => p.Longitude);
+        double maximumLongitude = points.Max(p => p.Longitude);
+
+        var centre = new Location(
+            (minimumLatitude + maximumLatitude) / 2.0,
+            (minimumLongitude + maximumLongitude) / 2.0);
+
+        // Longitude degrees shorten away from the equator, so the east-west extent is
+        // scaled by the cosine of the latitude before the two axes are compared.
+        double latitudeExtent = (maximumLatitude - minimumLatitude) * MetresPerDegreeLatitude;
+        double longitudeExtent = (maximumLongitude - minimumLongitude) * MetresPerDegreeLatitude
+                                 * Math.Cos(centre.Latitude * Math.PI / 180.0);
+
+        // Half the longer axis frames the box; one cell radius of margin keeps the
+        // outermost circles clear of the viewport edge.
+        double radiusMetres = (Math.Max(latitudeExtent, longitudeExtent) / 2.0)
+                              + HeatMapRenderer.CircleRadiusMeters;
+
+        return MapSpan.FromCenterAndRadius(
+            centre,
+            Distance.FromMeters(Math.Max(radiusMetres, MinimumSpanRadius.Meters)));
+    }
 
     /// <summary>Updates the status line on the main thread.</summary>
     private Task UpdateStatusAsync(string message)
