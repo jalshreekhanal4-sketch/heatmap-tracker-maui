@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <application android:allowBackup="true"
+               android:icon="@mipmap/appicon"
+               android:roundIcon="@mipmap/appicon_round"
+               android:supportsRtl="true">
+
+    <!-- Google Maps requires an API key. Replace the placeholder with a key from the
+         Google Cloud console with the "Maps SDK for Android" API enabled. -->
+    <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="YOUR_ANDROID_MAPS_API_KEY_HERE" />
+  </application>
+
+  <!-- Coarse and fine location are both requested: Android 12 and later let the user
+       grant only approximate location, and the app still works in that case. -->
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+  <!-- Declares that GPS hardware is preferred but not mandatory, so the app remains
+       installable on devices without it. -->
+  <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+</manifest>

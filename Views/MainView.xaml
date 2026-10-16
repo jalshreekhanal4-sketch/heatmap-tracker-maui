@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+             x:Class="HeatMapTracker.Views.MainView"
+             Title="MainView">
+
+    <Grid RowDefinitions="*, Auto">
+
+        <!-- The stock MAUI map. Heat circles are added to MapElements at runtime
+             by HeatMapRenderer rather than being declared here. -->
+        <maps:Map x:Name="HeatMap"
+                  Grid.Row="0"
+                  MapType="Street"
+                  IsShowingUser="True"
+                  IsZoomEnabled="True"
+                  IsScrollEnabled="True" />
+
+        <!-- Control strip: start/stop tracking, clear the database, and a live status line. -->
+        <VerticalStackLayout Grid.Row="1"
+                             Padding="12"
+                             Spacing="8"
+                             BackgroundColor="{AppThemeBinding Light=#F2F2F2, Dark=#1C1C1E}">
+
+            <Label x:Name="StatusLabel"
+                   Text="Tracking is stopped."
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=#333333, Dark=#E5E5E5}" />
+
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+
+                <Button x:Name="TrackingButton"
+                        Text="Start Tracking"
+                        Clicked="OnTrackingButtonClicked"
+                        WidthRequest="150" />
+
+                <Button x:Name="ClearButton"
+                        Text="Clear Data"
+                        Clicked="OnClearButtonClicked"
+                        WidthRequest="130" />
+
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

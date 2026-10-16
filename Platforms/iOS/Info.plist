@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/appicon.appiconset</string>
+
+	<!-- iOS shows this string in the permission prompt. A clear reason improves
+	     the grant rate and is required by App Store review. -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>HeatMapTracker records the places you visit so it can draw them as a heat map.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>HeatMapTracker records the places you visit so it can draw them as a heat map.</string>
+</dict>
+</plist>
