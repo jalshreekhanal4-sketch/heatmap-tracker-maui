@@ -35,39 +35,63 @@ latitude, cells measure 49.9 m on both axes.
 | `Services/LocationTrackingService.cs` | Permission handling and the polling loop |
 | `Services/HeatMapRenderer.cs` | Grid aggregation and circle rendering |
 | `Views/MainView.xaml` | Map, status line, and the two control buttons |
-| `Platforms/Android/AndroidManifest.xml` | Location permissions and the Maps API key |
+| `Platforms/Android/AndroidManifest.xml` | Location permissions and the Maps API key placeholder |
+| `Platforms/Android/MainActivity.cs` | Android entry point |
+| `maps.props.example` | Template for the untracked file holding the Maps API key |
 | `Platforms/iOS/Info.plist` | Location usage descriptions |
 
 ## Prerequisites
 
-- .NET 9 SDK
-- .NET MAUI workload: `dotnet workload install maui`
-- Android: Android SDK, plus a Google Maps API key (see below)
-- iOS: full Xcode installation (command line tools alone are not sufficient)
+- .NET 10 SDK
+- .NET MAUI Android workload: `dotnet workload install maui-android`
+- Android SDK (API 36) and a JDK 21 installation
+- A Google Maps API key (see below)
 
-## Google Maps API key (Android only)
+Only `net10.0-android` is built by default. Adding `net10.0-ios` requires a full Xcode
+installation; the command line tools alone are not sufficient.
 
-Android map rendering requires a key. Create one in the Google Cloud console with the
-**Maps SDK for Android** API enabled, then replace the placeholder in
-`Platforms/Android/AndroidManifest.xml`:
+## Google Maps API key
 
-```xml
-<meta-data android:name="com.google.android.geo.API_KEY"
-           android:value="YOUR_ANDROID_MAPS_API_KEY_HERE" />
-```
+Android map rendering requires a key, and without one the map draws no tiles and the
+log reports `Authorization failure`. The key is injected at build time rather than
+committed, so it stays out of the repository.
 
-iOS uses Apple Maps and needs no key.
+1. In the Google Cloud console, enable **Maps SDK for Android**.
+2. Create an API key and restrict it to this application:
+   - Application id: `com.ucumberlands.heatmaptracker`
+   - Debug signing certificate SHA-1 fingerprint, obtained with:
+
+     ```bash
+     keytool -list -v -storepass android \
+       -keystore "$HOME/Library/Application Support/Xamarin/Mono for Android/debug.keystore"
+     ```
+
+3. Copy the key into a local file that git ignores:
+
+   ```bash
+   cp maps.props.example maps.props   # then paste the key into maps.props
+   ```
+
+`maps.props` supplies the `MapsApiKey` property, which the build substitutes into the
+`${MAPS_API_KEY}` placeholder in `Platforms/Android/AndroidManifest.xml`.
 
 ## Build and run
 
 ```bash
 dotnet restore
-dotnet build -f net9.0-android
-dotnet build -t:Run -f net9.0-android       # deploy to a connected device or emulator
+dotnet build -f net10.0-android
+dotnet build -t:Run -f net10.0-android      # deploy to a connected device or emulator
 ```
 
 Grant the location permission when prompted, press **Start Tracking**, and move around.
 Circles appear as fixes accumulate and warm from blue toward red where you spend time.
+
+On an emulator, drive the location from Extended Controls → Location, or from the
+command line:
+
+```bash
+adb emu geo fix -96.7970 32.7767            # longitude first, then latitude
+```
 
 ## Coding conventions
 

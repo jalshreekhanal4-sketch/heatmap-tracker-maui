@@ -1,5 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Supplies MapsApiKey. Untracked, so each developer provides their own key;
+       copy maps.props.example to maps.props and paste a key into it. -->
+  <Import Project="maps.props" Condition="Exists('maps.props')" />
+
+
   <PropertyGroup>
     <!-- Android only by default. To also build for iOS, install a full Xcode and the
          iOS workload (`dotnet workload install ios`), then add net10.0-ios here. -->
@@ -18,6 +23,11 @@
 
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+
+    <!-- When maps.props is absent the build still succeeds, but Google Maps reports
+         an authorization failure at runtime and draws no tiles. -->
+    <MapsApiKey Condition="'$(MapsApiKey)' == ''">MISSING_MAPS_API_KEY</MapsApiKey>
+    <AndroidManifestPlaceholders>MAPS_API_KEY=$(MapsApiKey)</AndroidManifestPlaceholders>
   </PropertyGroup>
 
   <ItemGroup>

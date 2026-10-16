@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
              x:Class="HeatMapTracker.Views.MainView"
-             Title="MainView">
+             Title="Location Heat Map">
 
     <Grid RowDefinitions="*, Auto">
 

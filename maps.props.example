@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <!-- A Google Cloud API key with "Maps SDK for Android" enabled, restricted to
+         the application id com.ucumberlands.heatmaptracker. Copy this file to
+         maps.props and replace the value below. maps.props is gitignored. -->
+    <MapsApiKey>PASTE_YOUR_MAPS_API_KEY_HERE</MapsApiKey>
+  </PropertyGroup>
+</Project>

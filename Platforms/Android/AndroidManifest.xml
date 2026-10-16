@@ -6,10 +6,11 @@
                android:roundIcon="@mipmap/appicon_round"
                android:supportsRtl="true">
 
-    <!-- Google Maps requires an API key. Replace the placeholder with a key from the
-         Google Cloud console with the "Maps SDK for Android" API enabled. -->
+    <!-- Google Maps requires an API key. It is substituted at build time from the
+         MapsApiKey property in maps.props, which is not tracked by git so the key
+         never reaches the public repository. See maps.props.example. -->
     <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="YOUR_ANDROID_MAPS_API_KEY_HERE" />
+               android:value="${MAPS_API_KEY}" />
   </application>
 
   <!-- Coarse and fine location are both requested: Android 12 and later let the user

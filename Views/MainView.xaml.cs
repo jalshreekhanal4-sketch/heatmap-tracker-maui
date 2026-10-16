@@ -104,10 +104,14 @@ public partial class MainView : ContentPage
                 new Location(newest.Latitude, newest.Longitude), DefaultSpanRadius));
         }
 
-        await UpdateStatusAsync(_tracker.IsTracking
-            ? $"Tracking. {points.Count} points recorded across {cells.Count} areas."
-            : $"Stopped. {points.Count} points recorded across {cells.Count} areas.");
+        string state = _tracker.IsTracking ? "Tracking" : "Stopped";
+        await UpdateStatusAsync(
+            $"{state}. {points.Count} {Plural(points.Count, "point")} recorded " +
+            $"across {cells.Count} {Plural(cells.Count, "area")}.");
     }
+
+    /// <summary>Returns <paramref name="noun"/> pluralised for the supplied count.</summary>
+    private static string Plural(int count, string noun) => count == 1 ? noun : noun + "s";
 
     /// <summary>Updates the status line on the main thread.</summary>
     private Task UpdateStatusAsync(string message)
