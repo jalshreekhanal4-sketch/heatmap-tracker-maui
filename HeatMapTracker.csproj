@@ -1,7 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0-android;net9.0-ios</TargetFrameworks>
+    <!-- iOS can only be built from macOS with a full Xcode install, so it is added
+         conditionally. On Windows the project builds the Android target alone. -->
+    <TargetFrameworks>net9.0-android</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net9.0-android;net9.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>HeatMapTracker</RootNamespace>
     <UseMaui>true</UseMaui>
