@@ -59,7 +59,7 @@ public partial class MainView : ContentPage
     /// <summary>Deletes every stored point after confirmation and clears the overlay.</summary>
     private async void OnClearButtonClicked(object sender, EventArgs e)
     {
-        bool confirmed = await DisplayAlert(
+        bool confirmed = await DisplayAlertAsync(
             "Clear data",
             "Delete all recorded locations? This cannot be undone.",
             "Delete",
@@ -83,7 +83,7 @@ public partial class MainView : ContentPage
     private async void OnTrackingFailed(object? sender, string message)
     {
         TrackingButton.Text = "Start Tracking";
-        await DisplayAlert("Tracking stopped", message, "OK");
+        await DisplayAlertAsync("Tracking stopped", message, "OK");
     }
 
     /// <summary>

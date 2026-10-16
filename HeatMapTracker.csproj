@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- iOS can only be built from macOS with a full Xcode install, so it is added
-         conditionally. On Windows the project builds the Android target alone. -->
-    <TargetFrameworks>net9.0-android</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">net9.0-android;net9.0-ios</TargetFrameworks>
+    <!-- Android only by default. To also build for iOS, install a full Xcode and the
+         iOS workload (`dotnet workload install ios`), then add net10.0-ios here. -->
+    <TargetFrameworks>net10.0-android</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>HeatMapTracker</RootNamespace>
     <UseMaui>true</UseMaui>
@@ -24,15 +23,15 @@
   <ItemGroup>
     <MauiIcon Include="Resources\AppIcon\appicon.svg" />
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
-    <MauiFont Include="Resources\Fonts\*" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.*" />
-    <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="9.0.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.*" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Maui.Controls.Maps" Version="10.0.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.*" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.11.285" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android" Version="2.1.14" />
   </ItemGroup>
 
 </Project>

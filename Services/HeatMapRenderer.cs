@@ -1,6 +1,7 @@
 using HeatMapTracker.Models;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Maps;
+using Map = Microsoft.Maui.Controls.Maps.Map;   // Disambiguate from Microsoft.Maui.ApplicationModel.Map.
 
 namespace HeatMapTracker.Services;
 

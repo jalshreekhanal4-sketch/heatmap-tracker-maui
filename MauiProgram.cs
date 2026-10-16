@@ -15,12 +15,7 @@ public static class MauiProgram
 
         builder
             .UseMauiApp<App>()
-            .UseMauiMaps()   // Required for Microsoft.Maui.Controls.Maps to resolve handlers.
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+            .UseMauiMaps();   // Required for Microsoft.Maui.Controls.Maps to resolve handlers.
 
         // The database and tracker hold state for the lifetime of the app, so both are singletons.
         builder.Services.AddSingleton<LocationDatabase>();
